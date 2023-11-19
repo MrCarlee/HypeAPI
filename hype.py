@@ -31,7 +31,7 @@ class Hype(Banking):
         self.checksum = None
         super().__init__()
 
-    def login(self, username, password, birthdate):
+    async def login(self, username, password, birthdate):
         if isinstance(birthdate, datetime) or isinstance(birthdate, date):
             dob = birthdate.strftime("%d/%m/%Y")
         elif isinstance(birthdate, str):
@@ -80,7 +80,7 @@ class Hype(Banking):
         self.bin = enroll2.json()["Bin"]
         self._username = username
 
-    def otp2fa(self, code):
+    async def otp2fa(self, code):
         if self._username is None:
             raise Exception("Please login() before verifying OTP code")
         otp = self._session.post(
@@ -164,5 +164,5 @@ class Hype(Banking):
         self.bin = reenroll.json()["Bin"]
 
     @loginrequired
-    def get_movements(self, limit=5):
+    async def get_movements(self, limit=5):
         return self._api_request(method="GET", url=self.MOVEMENTS_URL.format(limit))
